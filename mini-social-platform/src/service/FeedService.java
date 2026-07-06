@@ -5,25 +5,29 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import cache.Cache;
+import cache.ICache;
 import model.Post;
 import model.User;
 
 public class FeedService {
 
-    private final Cache<String, List<Post>> feedCache;
+    private final ICache<String, List<Post>> feedCache;
 
     private final Map<String, User> users;
 
     private final Map<String, List<Post>> posts;
 
-    public FeedService(Cache<String, List<Post>> feedCache,
+    private final RequestCoalescer<List<Post>> requestCoalescer;
+        
+    public FeedService(ICache<String, List<Post>> feedCache,
             Map<String, User> users,
-            Map<String, List<Post>> posts) {
+            Map<String, List<Post>> posts,
+            RequestCoalescer<List<Post>> requestCoalescer) {
 
         this.feedCache = feedCache;
         this.users = users;
         this.posts = posts;
+        this.requestCoalescer = requestCoalescer;
     }
 
     public List<Post> getFeed(String userId) {
@@ -37,7 +41,7 @@ public class FeedService {
 
         System.out.println("Cache Miss");
 
-        List<Post> generatedFeed = generateFeed(userId);
+        List<Post> generatedFeed = requestCoalescer.execute(userId, () -> generateFeed(userId));
 
         feedCache.put(userId, generatedFeed);
 

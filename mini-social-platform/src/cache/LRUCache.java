@@ -3,7 +3,7 @@ package cache;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LRUCache<K, V> implements Cache<K, V> {
+public class LRUCache<K, V> implements ICache<K, V> {
 
     private final int capacity;
 

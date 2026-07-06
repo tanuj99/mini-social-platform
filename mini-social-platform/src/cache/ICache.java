@@ -1,6 +1,6 @@
 package cache;
 
-public interface Cache<K, V> {
+public interface ICache<K, V> {
 
     V get(K key);
 
