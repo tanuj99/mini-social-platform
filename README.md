@@ -1,4 +1,4 @@
-# Mini Social Platform - Caching Assignment
+# Mini Social Platform
 
 ## Overview
 
